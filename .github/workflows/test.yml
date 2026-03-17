@@ -2,8 +2,7 @@ name: Calculator Test
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
 
 jobs:
@@ -11,17 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install playwright
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install playwright
+
+      - name: Install HTTP Server
+        run: npm install -g http-server
 
       - name: Run UI Test
         run: |
           npx playwright install
+          npx http-server -p 8080 &
+          # Wait a bit to ensure server is ready
+          sleep 2
           node test.js

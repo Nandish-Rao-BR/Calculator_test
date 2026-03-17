@@ -1,10 +1,11 @@
 const { chromium } = require('playwright');
 
 (async () => {
-    const browser = await chromium.launch();
+    const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
 
-    await page.goto('file://' + __dirname + '/index.html');
+    // Use localhost where http-server serves files
+    await page.goto('http://localhost:8080/index.html');
 
     // Test 2 + 3 = 5
     await page.click('text=2');
